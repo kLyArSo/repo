@@ -27,13 +27,12 @@ void	*entry_point(void	*ptr)
 	return (NULL);
 }
 
-//print_status("has dropped a fork", data);
 void	my_sleep(long	time)
 {
 	long	start_time;
 
 	start_time = get_current_time_micro_seconds();
-	usleep((90 * time) / 100);
+	usleep(time - 10000);
 	while (get_current_time_micro_seconds() - start_time < time)
 		continue ;
 }
