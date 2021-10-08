@@ -27,7 +27,7 @@ void	detach(t_philo_data	*philos_data, pthread_t	*philosophers)
 
 void	destroy(t_philo_data	*philos_data)
 {
-	int	i;
+	int				i;
 	t_sidestep		*var;
 
 	var = sidestep_managment(NULL, FETCH);

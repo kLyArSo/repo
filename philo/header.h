@@ -16,7 +16,8 @@
 # define INIT 0
 # define FETCH 1
 # define FREE 2
-typedef	struct s_sidestep
+
+typedef struct s_sidestep
 {
 	ssize_t				start_time;
 	int					notification;
@@ -87,7 +88,7 @@ int				infinite_loop(t_argv	*game_args, pthread_t	*philosophers,
 int				last_three(t_argv	*game_args, pthread_t	*philosophers,
 					t_philo_data	*philos_data, t_checkers	*check);
 int				settings(t_philo_data	*philos_data, t_argv	*game_args,
-					pthread_t	*philosophers, t_checkers	*check);
+					pthread_t	*philosophers);
 size_t			skip(size_t	i, char	*src, int	*s);
 t_sidestep		*sidestep_managment(t_sidestep *vari, int	action);
 

@@ -1,10 +1,12 @@
 #include "header.h"
 
 int	settings(t_philo_data	*philos_data, t_argv	*game_args
-, pthread_t	*philosophers, t_checkers	*check)
+, pthread_t	*philosophers)
 {
 	t_sidestep		*var;
+	t_checkers		*check;
 
+	check = NULL;
 	var = sidestep_managment(NULL, FETCH);
 	set_philo_data(philos_data, game_args, forks_init(game_args));
 	if (philos_data->forks == NULL)
@@ -30,7 +32,8 @@ size_t	skip(size_t	i, char	*src, int	*s)
 
 t_sidestep	*sidestep_managment(t_sidestep *vari, int	action)
 {
-	static t_sidestep *var;
+	static t_sidestep	*var;
+
 	if (action == INIT)
 	{
 		var = vari;
@@ -38,26 +41,23 @@ t_sidestep	*sidestep_managment(t_sidestep *vari, int	action)
 		pthread_mutex_init(&var->lock_1, NULL);
 	}
 	else if (action == FETCH)
-		return ((t_sidestep	*)var);
+		return ((t_sidestep *)var);
 	else if (action == FREE)
 		free(var);
 	return (NULL);
 }
+
 int	main(int	argc, char	**argv)
 {
 	t_argv			*game_args;
 	pthread_t		*philosophers;
 	t_philo_data	*philos_data;
-	t_checkers		*check;
 	t_sidestep		*var;
 
 	var = malloc(sizeof(t_sidestep));
-	if (var == NULL)
+	if (var == NULL || argv_error_handling(argc, argv) == ERROR_DETECTED)
 		return (ERROR_DETECTED);
 	sidestep_managment(var, INIT);
-	check = NULL;
-	if (argv_error_handling(argc, argv) == ERROR_DETECTED)
-		return (ERROR_DETECTED);
 	game_args = fetch_args(argc, argv);
 	if (game_args == NULL)
 		return (game_args_error());
@@ -71,7 +71,6 @@ int	main(int	argc, char	**argv)
 			* sizeof(t_philo_data));
 	if (philos_data == NULL)
 		return (philos_data_malloc_err(game_args, philosophers));
-	settings(philos_data, game_args, philosophers, check);
+	settings(philos_data, game_args, philosophers);
 	return (0);
 }
-

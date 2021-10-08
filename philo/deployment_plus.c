@@ -69,6 +69,7 @@ void	print_status(char	*str, int	x)
 	var = sidestep_managment(NULL, FETCH);
 	pthread_mutex_lock(&var->lock_1);
 	printf("[%ld ms] %d %s.\n",
-		(get_current_time_micro_seconds() - var->start_time) / 1000, x + 1, str);
+		(get_current_time_micro_seconds()
+			- var->start_time) / 1000, x + 1, str);
 	pthread_mutex_unlock(&var->lock_1);
 }
