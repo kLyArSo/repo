@@ -1,7 +1,7 @@
 #include "header.h"
 
-void	set_philo_data(t_philo_data	*data, t_argv	*game_args
-		, pthread_mutex_t	*fork, t_checkers		*checker)
+void	set_philo_data(t_philo_data	*data
+		, t_argv	*game_args, pthread_mutex_t	*fork)
 {
 	int	i;
 
@@ -24,7 +24,6 @@ void	set_philo_data(t_philo_data	*data, t_argv	*game_args
 		data[i].next_meal_timestamp = data[i].last_meal_timestamp
 			+ game_args->time_to_die;
 		data[i].forks = fork;
-		data[i].checker = checker;
 		data[i].game_args = game_args;
 		i++;
 	}

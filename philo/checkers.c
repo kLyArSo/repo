@@ -5,7 +5,9 @@ void	*checker_meal(void	*ptr)
 	t_philo_data	*data;
 	int				i;
 	int				nbr_of_philo;
+	t_sidestep		*var;
 
+	var = sidestep_managment(NULL, FETCH);
 	data = (t_philo_data *)ptr;
 	nbr_of_philo = data->game_args->number_of_philosophers;
 	while (1)
@@ -22,19 +24,19 @@ void	*checker_meal(void	*ptr)
 		if (i == nbr_of_philo)
 			break ;
 	}
-	pthread_mutex_lock(&data->checker->lock_1);
-	data->checker->notification = MIN_MEAL_REACHED;
+	pthread_mutex_lock(&var->lock_1);
+	var->notification = MIN_MEAL_REACHED;
 	return (NULL);
 }
 
-void	norm_func(t_philo_data	*data)
+void	norm_func(int	i, t_sidestep	*var)
 {
-	print_status("died", data);
-	pthread_mutex_lock(&data->checker->lock_1);
-	data->checker->notification = PHILO_DEATH;
+	print_status("died", i);
+	pthread_mutex_lock(&var->lock_1);
+	var->notification = PHILO_DEATH;
 }
 
-int	check_loop(int	nbr_of_philo, t_philo_data	*data)
+int	check_loop(int	nbr_of_philo, t_philo_data	*data, t_sidestep	*var)
 {
 	int				current_timestamp;
 	int				i;
@@ -45,7 +47,7 @@ int	check_loop(int	nbr_of_philo, t_philo_data	*data)
 		while (i < nbr_of_philo)
 		{
 			current_timestamp = (get_current_time_micro_seconds()
-					- data->checker->start_time) / 1000;
+					- var->start_time) / 1000;
 			if (current_timestamp < data[i].next_meal_timestamp)
 				i++;
 			else
@@ -64,11 +66,13 @@ void	*checker_death(void	*ptr)
 	t_philo_data	*data;
 	int				i;
 	int				nbr_of_philo;
+	t_sidestep		*var;
 
+	var = sidestep_managment(NULL, FETCH);
 	data = (t_philo_data *)ptr;
 	nbr_of_philo = data->game_args->number_of_philosophers;
-	i = check_loop(nbr_of_philo, data);
-	norm_func(data);
+	i = check_loop(nbr_of_philo, data, var);
+	norm_func(i, var);
 	return (NULL);
 }
 

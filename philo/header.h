@@ -13,14 +13,19 @@
 # define MIN_MEAL_REACHED 12
 # define GAME_ARGS 0
 # define MALLOC_ERROR "no_allocation"
-
+# define INIT 0
+# define FETCH 1
+# define FREE 2
+typedef	struct s_sidestep
+{
+	ssize_t				start_time;
+	int					notification;
+	pthread_mutex_t		lock_1;
+}				t_sidestep;
 typedef struct s_checkers
 {
-	pthread_t			min_meal;
-	pthread_t			death;
-	pthread_mutex_t		lock_1;
-	int					notification;
-	ssize_t				start_time;
+	pthread_t	min_meal;
+	pthread_t	death;
 }				t_checkers;
 
 typedef struct s_argv
@@ -44,7 +49,6 @@ typedef struct s_philo_data
 	int				next_meal_timestamp;
 	pthread_mutex_t	*forks;
 	t_argv			*game_args;
-	t_checkers		*checker;
 }				t_philo_data;
 
 long			ft_atoi(char	*src);
@@ -54,9 +58,9 @@ int				argv_error_handling(int	argc, char	**argv);
 int				last_check(t_argv	*game_args);
 int				main(int	argc, char	**argv);
 void			set_philo_data(t_philo_data	*data, t_argv	*game_args,
-					pthread_mutex_t	*fork, t_checkers		*checker);
+					pthread_mutex_t	*fork);
 pthread_mutex_t	*forks_init(t_argv	*game_args);
-void			print_status(char	*str, t_philo_data	*data);
+void			print_status(char	*str, int	x);
 void			deploy_philosophers(t_argv	*game_args,
 					pthread_t	*philosophers, t_philo_data	*data);
 void			*entry_point(void	*ptr);
@@ -75,9 +79,9 @@ int				philo_malloc_err(t_argv	*game_args);
 int				philos_data_malloc_err(t_argv	*game_args,
 					pthread_t	*philosophers);
 int				un_init_forks(t_philo_data	*philos_data, t_argv	*game_args,
-					pthread_t	*philosophers, t_checkers	*check);
+					pthread_t	*philosophers);
 void			detach(t_philo_data	*philos_data, pthread_t	*philosophers);
-void			destroy(t_philo_data	*philos_data, t_checkers	*check);
+void			destroy(t_philo_data	*philos_data);
 int				infinite_loop(t_argv	*game_args, pthread_t	*philosophers,
 					t_philo_data	*philos_data, t_checkers	*check);
 int				last_three(t_argv	*game_args, pthread_t	*philosophers,
@@ -85,5 +89,6 @@ int				last_three(t_argv	*game_args, pthread_t	*philosophers,
 int				settings(t_philo_data	*philos_data, t_argv	*game_args,
 					pthread_t	*philosophers, t_checkers	*check);
 size_t			skip(size_t	i, char	*src, int	*s);
+t_sidestep		*sidestep_managment(t_sidestep *vari, int	action);
 
 #endif
